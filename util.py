@@ -67,7 +67,7 @@ def medium_operation():
 	dict = { 'question': question , 'option1' : option1 , 'option2' : option2 , 'option3' : option3 , 'option4' : option4 , 'answer' : str(answer) , 'param1' : dic_add , 'param2' : dic_sub } 
 	return dict 
 
-
+'''
 def advacned_operation():
 	dic_mult = easy_multiply()
 	dic_div = easy_divide()
@@ -76,7 +76,7 @@ def advacned_operation():
 	#question = 'Solve the expression ' + str(med_add['param1']) + ' + '+  str(med_add['param2']) 
 	#return question	
 
-'''
+
 def linear_easy():
 	a = randint(1,5)
 	b = 1
