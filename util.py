@@ -67,7 +67,6 @@ def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
   provided payload.
   """
-  import pdb; pdb.set_trace()
   data = json.loads(payload)
   messaging_events = data["entry"][0]["messaging"]
   for event in messaging_events:
