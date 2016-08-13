@@ -5,12 +5,11 @@ import traceback
 import random
 from constants import *
 import os
-from util import send_text_message
-from util import messaging_events
+from util import *
 
 app = Flask(__name__)
 
-PAT = 'EAANHAD7qAxkBAH4ZAZBdmXZAqAC3kYK5YjKngMo1HPVKMIp95dLl6fwBwvptwHg9WQFNWBYcVkaW1k8AiFAZA4vM0rzwlTBdIp5y4R95aZByoemeBPJDrOKXryq0RLNlzZBv6ZCMwuZB9YXsP2w2ghuZB70PDsPg7oYGbYOZB3sAdwDAZDZD'
+
 
 @app.route('/webhook', methods = ['GET'])
 def webhook():
@@ -22,15 +21,22 @@ def webhook():
 
 @app.route('/webhook', methods = ['POST'])
 def handle_message():
-    print "Handling Messages"
-    payload = request.get_data()
-    print payload
-    for sender, message in messaging_events(payload):
-        print "Incoming from %s: %s" % (sender, message)
-        send_text_message(PAT, sender, message)
-    return "ok"
+    try:
+        payload = request.get_data()
+        sender, message = messaging_events(payload)
+        if message == "click":
+            send_typing_status(sender)
+            send_button_template_message(sender, "Choose from the below",[
+                generate_button("Hello", "HelloButton"),
+                generate_button("How are you ?", "HelloButton")
+            ])
+        else:
+            send_text_message(sender, message)
+        return "ok"
+    except:
+        print "message with shit"
 
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 33507))
-    app.run(host = "0.0.0.0",port = port)
+    app.run(host = "0.0.0.0",port = port, debug = True)
