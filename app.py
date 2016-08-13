@@ -5,18 +5,28 @@ import traceback
 import random
 from constants import *
 import os
+from util import send_text_message
+from util import messaging_events
 
 app = Flask(__name__)
 
-@app.route('/webhook', methods = ['GET', 'POST'])
+@app.route('/webhook', methods = ['GET'])
 def webhook():
     if request.method == 'GET':
         if request.args.get('hub.verify_token') == VERIFY_TOKEN:
             return request.args.get('hub.challenge','')
         else:
             return "It's working well"
-    else:
-        return "Hii"
+
+@app.route('/webhook', methods = ['POST'])
+def handle_message():
+    print "Handling Messages"
+    payload = request.get_data()
+    print payload
+    for sender, message in messaging_events(payload):
+        print "Incoming from %s: %s" % (sender, message)
+        send_message(PAT, sender, message)
+    return "ok"
 
 
 if __name__ == '__main__':
