@@ -10,6 +10,8 @@ from util import messaging_events
 
 app = Flask(__name__)
 
+PAT = ''
+
 @app.route('/webhook', methods = ['GET'])
 def webhook():
     if request.method == 'GET':
