@@ -8,13 +8,15 @@ import os
 
 app = Flask(__name__)
 
-@app.route('/webhook')
+@app.route('/webhook', methods = ['GET', 'POST'])
 def webhook():
     if request.method == 'GET':
         if request.args.get('hub.verify_token') == VERIFY_TOKEN:
             return request.args.get('hub.challenge','')
         else:
             return "It's working well"
+    else:
+        return "Hii"
 
 
 if __name__ == '__main__':
