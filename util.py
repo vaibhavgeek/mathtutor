@@ -1,5 +1,5 @@
 import json
-from flask import request
+import requests
 
 def send_text_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
