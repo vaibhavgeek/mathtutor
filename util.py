@@ -115,11 +115,10 @@ def easy_addition():
 	b = randint(1,20)
 	question = 'Add the numbers ' + str(a) + ' and ' + str(b)
 	answer = a + b
-	option1 = answer + randint(1,3)
+	option1 = answer + randint(5,8)
 	option2 = answer + randint(3,5)
-	option3 = answer + randint(5,7)
-	option4 = answer + randint(8,11)
-	dict = { 'question': question , 'option1' : option1 , 'option2' : option2 , 'option3' : option3 , 'option4' : option4 , 'answer' : str(answer) , 'param1' : a , 'param2' : b }
+    array = [ answer , option1 , option2]
+	dict = { 'question': question , 'a' : option1 , 'b' : option2 , 'option3' : option3 , 'option4' : option4 , 'answer' : str(answer) , 'param1' : a , 'param2' : b }
 	return dict
 
 def easy_subtraction():
@@ -175,6 +174,25 @@ def medium_operation():
 	option4 = answer + randint(8,11)
 	dict = { 'question': question , 'option1' : option1 , 'option2' : option2 , 'option3' : option3 , 'option4' : option4 , 'answer' : str(answer) , 'param1' : dic_add , 'param2' : dic_sub }
 	return dict
+
+def get_solution_from_wolfarmAlpha(question):
+    url = "http://api.wolframalpha.com/v2/query"
+    params = {"input" : question, "appid" : "Q7K5HX-2Y24EKLAQW", "format" : 'image,plaintext'}
+    r = requests.get(url, params = params)
+    import pdb; pdb.set_trace()
+    root = xml.etree.ElementTree.fromstring(r.text)
+    response = []
+    count = 0
+    for f in root:
+        if count == 0:
+            count = count + 1
+            continue
+        temp = {}
+        temp["title"] = f.attrib['title']
+        temp["img"] = f[0][0].attrib['src']
+        response.append(temp)
+    return response
+
 
 '''
 def advacned_operation():

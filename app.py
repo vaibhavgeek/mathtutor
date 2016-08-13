@@ -6,8 +6,12 @@ import random
 from constants import *
 import os
 from util import *
+from pymongo import MongoClient
 
 app = Flask(__name__)
+
+client = MongoClient(CONNECTION)
+db = client.mathman
 
 @app.route('/webhook', methods = ['GET'])
 def webhook():
@@ -20,19 +24,24 @@ def webhook():
 @app.route('/webhook', methods = ['POST'])
 def handle_message():
     try:
-        import pdb; pdb.set_trace()
+        user = None
         payload = request.get_data()
         sender, message = messaging_events(payload)
+        user = db.user.find_one({"fbId" : sender})
+        if user is None:
+            db.user.insert({"fbId" : sender, "level" : "expert", "isFirstTime" : True})
+            user = db.user.find_one({"fbId" : sender})
+
         if message == "Start":
             send_button_template_message(
-                sender,
-                "Great, What do you want to do ?",
-                [
-                    generate_button("Learn & Practice", "LEARN"),
-                    generate_button("Ask Doubts", "ASK"),
-                    generate_button("Solve Math Puzzles", "PUZZ")
-                ]
-            )
+            sender,
+            "Great, What do you want to do ?",
+            [
+                generate_button("Learn & Practice", "LEARN"),
+                generate_button("Ask Doubts", "ASK"),
+                generate_button("Solve Math Puzzles", "PUZZ")
+            ]
+        )
         elif message == "LEARN":
             send_carasol_items(
                 sender,
@@ -44,6 +53,11 @@ def handle_message():
                 ]
             )
 
+        elif message == "ON":
+            if user["isFirstTime"]:
+                db.user.update({"fbId" : user["fbId"]}, {"$set" : {"isFirstTime" : False}})
+                send_text_message(sender, "Hey! Let's start with some questions so we can know how good you are with particular topic.")
+                
 
         return "ok"
     except:
