@@ -32,7 +32,7 @@ def handle_message():
         user = db.user.find_one({"fbId": sender})
         if user is None:
             db.user.insert(
-                {"fbId": sender, "level": "expert", "isFirstTime": True})
+                {"fbId": sender, "level": "expert", "isFirstTime": True, "correctQuestions" : 3})
             user = db.user.find_one({"fbId": sender})
 
         if message == "Start":
@@ -67,7 +67,6 @@ def handle_message():
                         "BT")])
 
         elif message == "ON":
-            import pdb;pdb.set_trace()
             if user["isFirstTime"]:
                 db.user.update({"fbId": user["fbId"]}, {
                                "$set": {"isFirstTime": False}})
@@ -91,14 +90,63 @@ def handle_message():
                 )
         elif message == "correct":
             send_text_message(sender, "Congralutions you are correct :D")
+            showResults(sender, user["lastQuestion"])
+            db.user.update({"fbId" : sender}, {"$inc" : {'correctQuestions' : 1}})
+            user = db.user.find_one({"fbId" : sender})
+            if user["correctQuestions"] == 3:
+                db.user.update({"fbId" : sender}, {"$set" : {'correctQuestions' : 0}})
+                if user["level"] == "medium":
+                    db.user.update({"fbId" : sender}, {"$set" : {'level' : "Expert"}})
+                elif user["level"] == "noob":
+                    db.user.update({"fbId" : sender}, {"$set" : {'level' : "medium"}})
         elif message == "incorrect":
             send_text_message(sender, "Oops sounds like you made a mistake :(")
-        get_solution_from_wolfarmAlpha(questionToAsk["question"])
-        
+            showResults(sender, user["lastQuestion"])
+            db.user.update({"fbId" : sender}, {"$inc" : {'correctQuestions' : 0}})
+            user = db.user.find_one({"fbId" : sender})
+            if user["correctQuestions"] == 0 or user["correctQuestions"] == -3:
+                if user["level"] == "Expert":
+                    db.user.update({"fbId" : sender}, {"$set" : {'level' : "medium"}})
+                elif user["level"] == "medium":
+                    db.user.update({"fbId" : sender}, {"$set" : {'level' : "noob"}})
+        askQuestion(sender)
         return "ok"
     except:
         print "message with shit"
 
+
+def askQuestion(recipent):
+    user = db.user.find_one({"fbId" : recipent})
+    if user["level"] == 'expert':
+        questionToAsk = medium_operation()
+    elif user["level"] == "medium":
+        questionToAsk = medium_operation()
+
+    elif user["level"] == "noob":
+        questionToAsk = medium_operation()
+
+    send_text_message(sender, questionToAsk["question"])
+    db.user.update({"fbId": user["fbId"]}, {
+                   "$set": {"lastQuestion": questionToAsk["question"]}})
+    buttons = [
+        generate_button("A " + str(questionToAsk["option1"]), payload='incorrect'),
+        generate_button("B " + str(questionToAsk["option2"]), payload='incorrect'),
+        generate_button("C " + str(questionToAsk["option3"]), payload='incorrect')
+    ]
+    buttons[questionToAsk["answer"]]["payload"] = 'correct'
+    send_button_template_message(
+        sender,
+        "Select Your Choice",
+        buttons
+    )
+
+
+def showResults(sender, question):
+    import pdb; pdb.set_trace()
+    data = get_solution_from_wolfarmAlpha(question)
+    items = []
+    for item in data:
+        send_image(sender, item["img"])
 
 def init():
     r = requests.post(THREAD_URL,

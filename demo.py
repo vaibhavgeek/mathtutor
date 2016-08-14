@@ -34,4 +34,20 @@ def get_solution_from_wolfarmAlpha(question):
         response.append(temp)
         generate_carasol_items(question , temp["img"] , temp["title"] , False)
 
+    send_carasol_items(
+        sender,
+        [
+            generate_carasol_items(
+                "Solution Explained",
+                temp["img"]),
+            generate_carasol_items(
+                "Solution Exaplined",
+                "http://www.mycompasstest.com/wp-content/uploads/2011/01/BBlintwo.png"),
+            generate_carasol_items(
+                "Quadratic Equations",
+                "https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/Quadratic-equation.svg/769px-Quadratic-equation.svg.png"),
+            generate_carasol_items(
+                "Basic Trignometry",
+                "https://www.mathsisfun.com/images/adjacent-opposite-hypotenuse.gif")
+        ])
     return response
