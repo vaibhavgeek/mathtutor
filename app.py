@@ -93,7 +93,8 @@ def handle_message():
             send_text_message(sender, "Congralutions you are correct :D")
         elif message == "incorrect":
             send_text_message(sender, "Oops sounds like you made a mistake :(")
-
+        get_solution_from_wolfarmAlpha(questionToAsk["question"])
+        
         return "ok"
     except:
         print "message with shit"

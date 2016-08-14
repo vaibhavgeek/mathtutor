@@ -32,4 +32,6 @@ def get_solution_from_wolfarmAlpha(question):
         temp["title"] = f.attrib['title']
         temp["img"] = f[0][0].attrib['src']
         response.append(temp)
+        generate_carasol_items(question , temp["img"] , temp["title"] , False)
+
     return response
