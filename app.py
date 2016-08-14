@@ -96,6 +96,59 @@ def handle_message():
                 )
             else:
                 askQuestion(sender)
+
+        elif message == "LINEAR":
+            if user["isFirstTime"]:
+                db.user.update({"fbId": user["fbId"]}, {
+                               "$set": {"isFirstTime": False}})
+                send_text_message(
+                    sender,
+                    "Hey! Let's start with some questions so we can know how good you are with particular topic.")
+                questionToAsk = linear_hard()
+                send_text_message(sender, questionToAsk["question"])
+                db.user.update({"fbId": user["fbId"]}, {
+                               "$set": {"lastQuestion": questionToAsk["question"]}})
+                buttons = [
+                    generate_button("A " + str(questionToAsk["option1"]), payload='incorrect1'),
+                    generate_button("B " + str(questionToAsk["option2"]), payload='incorrect2'),
+                    generate_button("C " + str(questionToAsk["option3"]), payload='incorrect3')
+                ]
+                buttons[questionToAsk["answer"]]["payload"] = 'correct'
+                send_button_template_message(
+                    sender,
+                    "Select Your Choice",
+                    buttons
+                )
+            else:
+                askQuestion(sender, message)
+
+
+        elif message == 'QUAD':
+            if user["isFirstTime"]:
+                db.user.update({"fbId": user["fbId"]}, {
+                               "$set": {"isFirstTime": False}})
+                send_text_message(
+                    sender,
+                    "Hey! Let's start with some questions so we can know how good you are with particular topic.")
+                questionToAsk = quadhard()
+                send_text_message(sender, questionToAsk["question"])
+                db.user.update({"fbId": user["fbId"]}, {
+                               "$set": {"lastQuestion": questionToAsk["question"]}})
+                buttons = [
+                    generate_button("A " + str(questionToAsk["option1"]), payload='incorrect1'),
+                    generate_button("B " + str(questionToAsk["option2"]), payload='incorrect2'),
+                    generate_button("C " + str(questionToAsk["option3"]), payload='incorrect3')
+                ]
+                buttons[questionToAsk["answer"]]["payload"] = 'correct'
+                send_button_template_message(
+                    sender,
+                    "Select Your Choice",
+                    buttons
+                )
+            else:
+                askQuestion(sender, message)
+
+
         elif message == "correct":
             send_text_message(sender, "Congralutions you are correct :D")
             showResults(sender, user["lastQuestion"])
@@ -119,20 +172,44 @@ def handle_message():
                 elif user["level"] == "medium":
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "noob"}})
             askQuestion(sender)
+        elif message == 'ASK':
+            send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")
+        else:
+            import pdb;pdb.set_trace()
+            try:
+                showResults(sender, message)
+            except:
+                send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
         return "ok"
     except:
         print "message with shit"
 
 
-def askQuestion(recipent):
+def askQuestion(recipent, chapter):
     user = db.user.find_one({"fbId" : recipent})
     if user["level"] == 'Expert':
-        questionToAsk = medium_operation()
+        if chapter == 'ON':
+            questionToAsk = advacned_operation()
+        elif chapter == 'Linear':
+            questionToAsk = linear_hard()
+        elif chapter == 'QUAD':
+            questionToAsk = quadhard()
+
     elif user["level"] == "medium":
-        questionToAsk = medium_operation()
+        if chapter == 'ON':
+            questionToAsk = medium_operation()
+        elif chapter == 'Linear':
+            questionToAsk = linear_medium()
+        elif chapter == 'QUAD':
+            questionToAsk = quadmedium()
 
     elif user["level"] == "noob":
-        questionToAsk = medium_operation()
+        if chapter == 'ON':
+            questionToAsk = easy_multiply()
+        elif chapter == 'Linear':
+            questionToAsk = linear_easy()
+        elif chapter == 'QUAD':
+            questionToAsk = quadeasy()
 
     send_text_message(recipent, questionToAsk["question"])
     db.user.update({"fbId": user["fbId"]}, {
