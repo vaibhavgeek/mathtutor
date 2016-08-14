@@ -35,7 +35,6 @@ def handle_message():
         user = db.user.find_one({"fbId": sender})
         if message != 'incorrect' and checkNSFW(message):
             send_text_message("Can we talk about math ?")
-            return "ok"
         if user is None:
             db.user.insert(
                 {"fbId": sender, "level": "Expert", "isFirstTime": True, "correctQuestions" : 3})
@@ -47,7 +46,7 @@ def handle_message():
                 "Great, What do you want to do ?",
                 [
                     generate_button("Learn & Practice", "LEARN"),
-                    generate_button("Ask Doubts", "ASK"),
+                    generate_button("Ask Doubts", "USER_DEFINED_PAYLOAD"),
                     generate_button("Solve Math Puzzles", "PUZZ")
                 ]
             )
@@ -174,10 +173,9 @@ def handle_message():
                 elif user["level"] == "medium":
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "noob"}})
             askQuestion(sender, message)
-        elif message == 'ASK':
+        elif message == 'USER_DEFINED_PAYLOAD':
             send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")
         else:
-            import pdb;pdb.set_trace()
             try:
                 showResults(sender, message)
             except:
@@ -272,7 +270,7 @@ def init():
                               {
                                   "type": "postback",
                                   "title": "Ask Doubts",
-                                  "payload": "ASK"
+                                  "payload": "USER_DEFINED_PAYLOAD"
                               }
                           ]
                       }),
