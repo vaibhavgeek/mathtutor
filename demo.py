@@ -14,9 +14,13 @@ import xml.etree.ElementTree
 
 def get_solution_from_wolfarmAlpha(question):
     url = "http://api.wolframalpha.com/v2/query"
-    params = {"input" : question, "appid" : "Q7K5HX-2Y24EKLAQW", "format" : 'image,plaintext'}
-    r = requests.get(url, params = params)
-    import pdb; pdb.set_trace()
+    params = {
+        "input": question,
+        "appid": "Q7K5HX-2Y24EKLAQW",
+        "format": 'image,plaintext'}
+    r = requests.get(url, params=params)
+    import pdb
+    pdb.set_trace()
     root = xml.etree.ElementTree.fromstring(r.text)
     response = []
     count = 0
