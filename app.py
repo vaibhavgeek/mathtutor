@@ -95,7 +95,7 @@ def handle_message():
                     buttons
                 )
             else:
-                askQuestion(sender)
+                askQuestion(sender, message)
 
         elif message == "LINEAR":
             if user["isFirstTime"]:
@@ -148,7 +148,6 @@ def handle_message():
             else:
                 askQuestion(sender, message)
 
-
         elif message == "correct":
             send_text_message(sender, "Congralutions you are correct :D")
             showResults(sender, user["lastQuestion"])
@@ -160,9 +159,12 @@ def handle_message():
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "Expert"}})
                 elif user["level"] == "noob":
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "medium"}})
-            askQuestion(sender)
+            askQuestion(sender, message)
+
         elif message in "incorrect":
             send_text_message(sender, "Oops sounds like you made a mistake :(")
+            send_image(sender, "Here is a video tutorial which can help you to learn better")
+            send_text_message(sender, "http://maths.dis.ac-guyane.fr/sites/maths.dis.ac-guyane.fr/IMG/mp4/video1.mp4")
             showResults(sender, user["lastQuestion"])
             db.user.update({"fbId" : sender}, {"$set" : {'correctQuestions' : 0}})
             user = db.user.find_one({"fbId" : sender})
@@ -171,7 +173,7 @@ def handle_message():
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "medium"}})
                 elif user["level"] == "medium":
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "noob"}})
-            askQuestion(sender)
+            askQuestion(sender, message)
         elif message == 'ASK':
             send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")
         else:
@@ -187,6 +189,7 @@ def handle_message():
 
 def askQuestion(recipent, chapter):
     user = db.user.find_one({"fbId" : recipent})
+    questionToAsk = linear_hard()
     if user["level"] == 'Expert':
         if chapter == 'ON':
             questionToAsk = advacned_operation()
@@ -211,6 +214,7 @@ def askQuestion(recipent, chapter):
         elif chapter == 'QUAD':
             questionToAsk = quadeasy()
 
+
     send_text_message(recipent, questionToAsk["question"])
     db.user.update({"fbId": user["fbId"]}, {
                    "$set": {"lastQuestion": questionToAsk["question"]}})
@@ -228,10 +232,13 @@ def askQuestion(recipent, chapter):
 
 
 def showResults(sender, question):
-    data = get_solution_from_wolfarmAlpha(question)
-    items = []
-    for item in data:
-        send_image(sender, item["img"])
+    try:
+        data = get_solution_from_wolfarmAlpha(question)
+        items = []
+        for item in data:
+            send_image(sender, item["img"])
+    except:
+        pass
 
 def init():
     r = requests.post(THREAD_URL,

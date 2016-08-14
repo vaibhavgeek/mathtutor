@@ -71,13 +71,13 @@ def send_button_template_message(recipient, text, buttons):
     print r.text
 
 
-def send_image(recipent, item):
+def send_image(recipent, item, type="image"):
     r = requests.post(SEND_MESSAGE_URL, params = {'access_token' : token},
             data = json.dumps({
                 "recipient" : {"id" : recipent},
                 "message" : {
                     "attachment" : {
-                        "type" : "image",
+                        "type" : type,
                         "payload" : {
                             "url" : item
                         }
