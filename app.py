@@ -7,7 +7,7 @@ from constants import *
 import os
 from util import *
 from pymongo import MongoClient
-import render_template from flask
+from flask import render_template
 
 
 app = Flask(__name__)
@@ -22,7 +22,7 @@ def webhook():
         if request.args.get('hub.verify_token') == VERIFY_TOKEN:
             return request.args.get('hub.challenge', '')
         else:
-            return render template("privacy.html")
+            return render_template("privacy.html")
 
 
 @app.route('/webhook', methods=['POST'])
