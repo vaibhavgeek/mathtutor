@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 client = MongoClient(CONNECTION)
 db = client.mathman
+client = HODClient("c98a550e-06a8-47ff-84b6-e6ad5a346d7b", version="v1")
 
 
 @app.route('/webhook', methods=['GET'])
