@@ -29,6 +29,8 @@ def webhook():
 def handle_message():
     try:
         print request.json
+        import pdb
+        pdb.set_trace()
         user = None
         payload = request.get_data()
         sender, message = messaging_events(payload)
