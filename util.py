@@ -366,3 +366,25 @@ def advacned_operation():
     array.insert(rand, answer)
     dict = { 'question': question , 'option1' : array[0] , 'option2' : array[1] , 'option3' : array[2] , 'answer' : rand , 'param1' : param1 , 'param2' : param2 }
     return dict
+
+def get_message(data):
+  if data["object"] == "page":
+
+          for entry in data["entry"]:
+              for messaging_event in entry["messaging"]:
+
+                  if messaging_event.get("message"):  # someone sent us a message
+                      sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
+                     # recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
+                      message_text = messaging_event["message"]["text"]  # the message's text
+                      return ( message_text , sender_id ) 
+#                    send_message(sender_id, "got it, thanks!")
+
+#                if messaging_event.get("delivery"):  # delivery confirmation
+#                    pass
+
+#                if messaging_event.get("optin"):  # optin confirmation
+#                    pass
+
+#                if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
+#                    pass

@@ -27,8 +27,15 @@ def webhook():
 
 @app.route('/webhook', methods=['POST'])
 def handle_message():
+    data = request.json
+    message_t , sender_m =get_message(data)
+    if "Doubt" in message_t.lower() or "ask" in message_t.lower():
+        try:
+            showResults(sender, message)
+        except:
+            send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
+           
     try:
-        print request.get_data()
         user = None
         payload = request.get_data()
         sender, message = messaging_events(payload)
@@ -44,8 +51,7 @@ def handle_message():
                 "Great, What do you want to do ?",
                 [
                     generate_button("Learn & Practice", "LEARN"),
-                    generate_button("Ask Doubts", "USER_DEFINED_PAYLOAD"),
-                    generate_button("Solve Math Puzzles", "PUZZ")
+                    generate_button("Ask Doubts", "USER_DEFINED_PAYLOAD")
                 ]
             )
         elif message == "LEARN":
@@ -172,11 +178,7 @@ def handle_message():
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "noob"}})
             askQuestion(sender, message)
         elif message == 'USER_DEFINED_PAYLOAD':
-            send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")
-            try:
-                showResults(sender, message)
-            except:
-                send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
+            send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")    
         else:
             try:
                 showResults(sender, message)
