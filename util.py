@@ -218,8 +218,8 @@ def linear_easy():
     answer_4 = b*d
     answer_5 = d*c
     answer_6 = f*a
-    final_answer_1 = float(answer_1 - answer_2) / (answer_3 - answer_4)
-    final_answer_2 = float(answer_5 - answer_6) / (answer_3 - answer_4)
+    final_answer_1 = float(answer_1) / float(answer_3 - answer_4)
+    final_answer_2 = float(answer_6) / float(answer_4 - answer_3)
     answer = "(" + "{:.2f}".format(final_answer_1) + ", " + "{:.2f}".format(final_answer_2) + ")"
     option1 = "(" + ("{:.2f}".format(final_answer_1+ 0.23))  + ", " + ("{:.2f}".format(final_answer_2+0.23))  + ")"
     option2 = "(" + ("{:.2f}".format(final_answer_1+ 0.57))  + ", " + ("{:.2f}".format(final_answer_2+0.57))  + ")"
