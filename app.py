@@ -28,13 +28,7 @@ def webhook():
 @app.route('/webhook', methods=['POST'])
 def handle_message():
     data = request.json
-    message_t , sender_m =get_message(data)
-    if "Doubt" in message_t.lower() or "ask" in message_t.lower():
-        try:
-            showResults(sender, message)
-        except:
-            send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
-           
+    print data
     try:
         user = None
         payload = request.get_data()
