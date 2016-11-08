@@ -182,7 +182,7 @@ def handle_message():
             except:
                 send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
       
-              return "ok"
+        return "ok"
     except:
         print "message with shit"
 
