@@ -28,7 +28,7 @@ def webhook():
 @app.route('/webhook', methods=['POST'])
 def handle_message():
     try:
-        print request.json
+        print request.get_data()
         import pdb
         pdb.set_trace()
         user = None

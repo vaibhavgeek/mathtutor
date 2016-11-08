@@ -151,8 +151,7 @@ def messaging_events(payload):
     messaging_events = data["entry"][0]["messaging"]
     for event in messaging_events:
         if "message" in event and "text" in event["message"]:
-            return (event["sender"]["id"], event["message"]
-                ["text"].encode('unicode_escape'))
+            return (event["sender"]["id"], event["message"]["text"].encode('unicode_escape'))
         elif "postback" in event and "payload" in event["postback"]:
             return (event["sender"]["id"], event["postback"]["payload"])
 
