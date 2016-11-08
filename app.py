@@ -161,6 +161,8 @@ def handle_message():
 
         elif message in "incorrect":
             send_text_message(sender, "Oops sounds like you made a mistake :(")
+            send_image(sender, "Here is a video tutorial which can help you to learn better")
+            send_text_message(sender, "http://maths.dis.ac-guyane.fr/sites/maths.dis.ac-guyane.fr/IMG/mp4/video1.mp4")
             showResults(sender, user["lastQuestion"])
             db.user.update({"fbId" : sender}, {"$set" : {'correctQuestions' : 0}})
             user = db.user.find_one({"fbId" : sender})
@@ -172,17 +174,12 @@ def handle_message():
             askQuestion(sender, message)
         elif message == 'USER_DEFINED_PAYLOAD':
             send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")
-            try:
-                showResults(sender, message)
-            except:
-                send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
         else:
             try:
                 showResults(sender, message)
             except:
                 send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
-      
-        
+        return "ok"
     except:
         print "message with shit"
 
