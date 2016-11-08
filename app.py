@@ -33,8 +33,6 @@ def handle_message():
         payload = request.get_data()
         sender, message = messaging_events(payload)
         user = db.user.find_one({"fbId": sender})
-        if message != 'incorrect' and checkNSFW(message):
-            send_text_message("Can we talk about math ?")
         if user is None:
             db.user.insert(
                 {"fbId": sender, "level": "Expert", "isFirstTime": True, "correctQuestions" : 3})
