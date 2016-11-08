@@ -182,7 +182,7 @@ def handle_message():
         return "ok"
     except:
         print "message with shit"
-        pass
+        return "Hello World"
 
 
 def askQuestion(recipent, chapter):
