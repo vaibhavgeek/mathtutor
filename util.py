@@ -37,7 +37,7 @@ def get_solution_from_wolfarmAlpha(question):
         response.append(temp)
     return response
 
-def send_text_message(recipient, text):
+def send_text_message(recipient, text , metadata = "default"):
   """Send the message text to recipient with id recipient.
   """
 
@@ -45,7 +45,7 @@ def send_text_message(recipient, text):
     params={"access_token": token},
       data=json.dumps({
           "recipient": {"id": recipient},
-      "message": {"text": text.decode('unicode_escape')},
+      "message": {"text": text.decode('unicode_escape') , "metadata": metadata },
     }),
       headers={'Content-type': 'application/json'})
   if r.status_code != requests.codes.ok:

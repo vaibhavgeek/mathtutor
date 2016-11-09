@@ -173,12 +173,8 @@ def handle_message():
             askQuestion(sender, message)
         elif message == 'USER_DEFINED_PAYLOAD':
             send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")    
-        else:
-            try:
-                showResults(sender, message)
-            except:
-                send_text_message(sender, "I am not that qualified to answer Your question :D but yes I am a quick learner")
-        return "ok"
+            
+        return "ok" 
     except:
         print "message with shit"
         return "Hello World"
