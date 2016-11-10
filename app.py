@@ -29,7 +29,7 @@ def webhook():
 def handle_message():
     data = request.json 
     if get_message(data):
-        sed_id , message_t = get_message(data)
+        message_t , sed_id = get_message(data)
         if "solve" in message_t.lower(): 
             showResults(sed_id , message_t)
         print message_t    
