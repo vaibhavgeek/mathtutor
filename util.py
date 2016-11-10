@@ -26,13 +26,16 @@ def get_solution_from_wolfarmAlpha(question):
     r = requests.get(url, params = params)
     root = xml.etree.ElementTree.fromstring(r.text)
     response = []
+    count = 0
     for f in root:
+        if count == 0:
+            count = count + 1
+            continue
         temp = {}
         print f
         temp["title"] = f.attrib['title']
         temp["img"] = f[0][0].attrib['src']
         response.append(temp)
-    print response
     return response
 
 def send_text_message(recipient, text , metadata = "default"):
