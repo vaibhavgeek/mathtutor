@@ -36,6 +36,7 @@ def get_solution_from_wolfarmAlpha(question):
         temp["img"] = f[0][0].attrib['src']
         response.append(temp)
     print response
+    print root
     return response
 
 def send_text_message(recipient, text , metadata = "default"):
