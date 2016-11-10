@@ -32,6 +32,7 @@ def handle_message():
         sed_id , message_t = get_message(data)
         if "solve" in message_t.lower(): 
             showResults(sed_id , message_t)
+        print data    
     try:
         user = None
         payload = request.get_data()
