@@ -28,11 +28,11 @@ def get_solution_from_wolfarmAlpha(question):
     response = []
     for f in root:
         temp = {}
-        for iterate in f[0]:
-            temp["img"] = iterate.attrib['src']
-            response.append(temp)
+        print f
+        temp["title"] = f.attrib['title']
+        temp["img"] = f[0][0].attrib['src']
+        response.append(temp)
     print response
-    print root
     return response
 
 def send_text_message(recipient, text , metadata = "default"):
