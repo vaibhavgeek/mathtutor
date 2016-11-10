@@ -28,9 +28,10 @@ def webhook():
 @app.route('/webhook', methods=['POST'])
 def handle_message():
     data = request.json 
-    sed_id , message_t = get_message(data)
-    if "solve" in message_t.lower(): 
-        showResults(sed_id , message_t)
+    if get_message(data):
+        sed_id , message_t = get_message(data)
+        if "solve" in message_t.lower(): 
+            showResults(sed_id , message_t)
     try:
         user = None
         payload = request.get_data()
