@@ -27,8 +27,10 @@ def webhook():
 
 @app.route('/webhook', methods=['POST'])
 def handle_message():
-    data = request.json
-    print data
+    data = request.json 
+    sed_id , message_t = get_message(data)
+    if "solve" in message_t.lower(): 
+        showResults(sed_id , message_t)
     try:
         user = None
         payload = request.get_data()
@@ -161,7 +163,6 @@ def handle_message():
         elif message in "incorrect":
             send_text_message(sender, "Oops sounds like you made a mistake :(")
             send_image(sender, "Here is a video tutorial which can help you to learn better")
-            send_text_message(sender, "http://maths.dis.ac-guyane.fr/sites/maths.dis.ac-guyane.fr/IMG/mp4/video1.mp4")
             showResults(sender, user["lastQuestion"])
             db.user.update({"fbId" : sender}, {"$set" : {'correctQuestions' : 0}})
             user = db.user.find_one({"fbId" : sender})
@@ -172,7 +173,7 @@ def handle_message():
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "noob"}})
             askQuestion(sender, message)
         elif message == 'USER_DEFINED_PAYLOAD':
-            send_text_message(sender, "Simply send the question in text, our advance AI engine will understand it and try to solve any of your problem.")    
+            send_text_message(sender, "Simply send the question in text, our advance AI engine will try to understand it. Type 'Solve' followed by the question")    
             
         return "ok" 
     except:
