@@ -26,15 +26,11 @@ def get_solution_from_wolfarmAlpha(question):
     r = requests.get(url, params = params)
     root = xml.etree.ElementTree.fromstring(r.text)
     response = []
-    count = 0
     for f in root:
-        if count == 0:
-            count = count + 1
-            continue
         temp = {}
-        temp["title"] = f.attrib['title']
-        temp["img"] = f[0][0].attrib['src']
-        response.append(temp)
+        for iterate in f[0]:
+            temp["img"] = iterate.attrib['src']
+            response.append(temp)
     print response
     print root
     return response
