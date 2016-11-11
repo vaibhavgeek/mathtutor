@@ -32,7 +32,6 @@ def get_solution_from_wolfarmAlpha(question):
             count = count + 1
             continue
         temp = {}
-        print f
         temp["title"] = f.attrib['title']
         temp["img"] = f[0][0].attrib['src']
         response.append(temp)
