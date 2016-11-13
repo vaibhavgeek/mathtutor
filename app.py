@@ -271,7 +271,7 @@ def init():
                               {
                                   "type": "postback",
                                   "title": "Help",
-                                  "payload": "Help"
+                                  "payload": "help"
                               }
                           ]
                       }),
