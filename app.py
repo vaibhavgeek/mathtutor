@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 client = MongoClient(CONNECTION)
 db = client.mathman
-
+    
 
 @app.route('/webhook', methods=['GET'])
 def webhook():
@@ -35,7 +35,7 @@ def handle_message():
                 showResults(sed_id , message_t)
             print message_t
     except:
-        pass            
+        pass               
     try:
         user = None
         payload = request.get_data()
@@ -177,8 +177,8 @@ def handle_message():
                 elif user["level"] == "medium":
                     db.user.update({"fbId" : sender}, {"$set" : {'level' : "noob"}})
             askQuestion(sender, message)
-        elif message == 'USER_DEFINED_PAYLOAD':
-            send_text_message(sender, "Simply send the question in text, our advance AI engine will try to understand it. Type 'Solve' followed by the question")    
+        elif message == 'help':
+            send_text_message(sender, "You can use our bot to practise questions of certain topics. We will keep adding the topics and improving the bot for better.")    
             
         return "ok" 
     except:
@@ -270,8 +270,8 @@ def init():
                               },
                               {
                                   "type": "postback",
-                                  "title": "Ask Doubts",
-                                  "payload": "USER_DEFINED_PAYLOAD"
+                                  "title": "Help",
+                                  "payload": "Help"
                               }
                           ]
                       }),
